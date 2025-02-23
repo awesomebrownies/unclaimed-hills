@@ -1,5 +1,7 @@
-import json, time, random;
+import time, random, logging, threading;
 from flask import Flask, jsonify, request;
+
+logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
 
@@ -25,7 +27,17 @@ hex_rows = [1,2,4,5,4,3,2,1]
 
 @app.route('/game/active', methods=['GET'])
 def countActiveGames():
-    return jsonify({'count': activeGames.__len__}), 200
+    return jsonify({'count': activeGames.__len__})
+
+@app.route('/game/sync', methods=['GET'])
+def synchronize():
+    data = request.get_json()
+    gameCode = data.get('gameCode')
+
+    if gameCode not in activeGames:
+        return jsonify({'error': 'Game not found'}), 404
+    #find current interval time, the board arraylist
+    
 
 def generateCode():
     return "".join(chr(random.randint(65, 90)) for _ in range(4))
@@ -146,9 +158,10 @@ def index_to_coord(index):
 
 #game loop
 def loop():
+    logging.debug('test1')
     while True:
+        logging.debug('test2')
         time.sleep(5)
-        print('test')
         for gameCode in list(activeGames.keys()):
             game = activeGames[gameCode]
             if game['startTime'] != -1:
@@ -180,6 +193,9 @@ def loop():
                 activeGames.pop(gameCode)
 
 if __name__ == '__main__':
-   app.run(port=5000)
-   loop()
+    #run game in separate thread
+    game_thread = threading.Thread(target=loop, daemon=True)
+    game_thread.start()
+    #run flask
+    app.run(debug=True)
 
