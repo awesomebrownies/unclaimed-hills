@@ -27,7 +27,7 @@ hex_rows = [1,2,4,5,4,3,2,1]
 
 @app.route('/game/active', methods=['GET'])
 def countActiveGames():
-    return jsonify({'count': activeGames.__len__})
+    return jsonify({'count': len(activeGames)})
 
 @app.route('/game/sync', methods=['GET'])
 def synchronize():
@@ -37,7 +37,7 @@ def synchronize():
     if gameCode not in activeGames:
         return jsonify({'error': 'Game not found'}), 404
     #find current interval time, the board arraylist
-    
+    return jsonify({'board': activeGames[gameCode]['board']})
 
 def generateCode():
     return "".join(chr(random.randint(65, 90)) for _ in range(4))
@@ -60,7 +60,7 @@ def createGame():
     #additional numbers=stacked protection
     board = [0] * sum(hex_rows)
     board[hostLocation] = 1
-    board[playerLocation]
+    board[playerLocation] = -1
 
     activeGames[gameCode] = {
         'creationTime': creationTime,
@@ -158,12 +158,13 @@ def index_to_coord(index):
 
 #game loop
 def loop():
-    logging.debug('test1')
     while True:
-        logging.debug('test2')
         time.sleep(5)
+        logging.debug('test2')
         for gameCode in list(activeGames.keys()):
             game = activeGames[gameCode]
+            if game['creationTime']-time.time() > 60 * 1000 * 5:
+                activeGames.pop(game)
             if game['startTime'] != -1:
                 continue
             board = game['board']
@@ -189,7 +190,7 @@ def loop():
 
                 game[playerType] = None
             
-            if game['timeout'] > 5:
+            if game['timeout'] > 20:
                 activeGames.pop(gameCode)
 
 if __name__ == '__main__':
