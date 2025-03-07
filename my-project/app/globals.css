@@ -1,3 +1,19 @@
+.grid {
+  position: relative;
+  width: 400px;
+  height: 500px;
+  margin: 50px auto;
+}
+
+.hexagon {
+  width: 100px; /* Width of hexagon */
+  height: 100px; /* Height of hexagon */
+  position: absolute;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  transition: all 0.3s ease-in-out;
+}
+
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -33,10 +49,4 @@ body {
 a {
   color: inherit;
   text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
 }
