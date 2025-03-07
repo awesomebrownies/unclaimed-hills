@@ -221,9 +221,6 @@ const HexGrid: React.FC<HexGridProps> = ({ gameCode, playerId, playerType }) => 
       alert(`Error: ${data.message}`);
     });
 
-    // Start countdown timer
-    startCountdownTimer();
-
     // Cleanup on component unmount
     return () => {
       if (timerRef.current) {
@@ -236,21 +233,32 @@ const HexGrid: React.FC<HexGridProps> = ({ gameCode, playerId, playerType }) => 
   }, [gameCode]);
 
   // Start a countdown timer for the next move
-  const startCountdownTimer = () => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-    }
-    
-    timerRef.current = setInterval(() => {
-      const now = Date.now();
-      const timeRemaining = Math.max(0, Math.floor((gameState.nextUpdateTime - now) / 1000));
-      
-      setGameState(prev => ({
-        ...prev,
-        countdown: timeRemaining
-      }));
-    }, 1000);
-  };
+  useEffect(() => {
+    const startCountdownTimer = () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+  
+      timerRef.current = setInterval(() => {
+        const now = Date.now();
+        const timeRemaining = Math.max(0, Math.floor((gameState.nextUpdateTime - now) / 1000));
+  
+        setGameState(prev => ({
+          ...prev,
+          countdown: timeRemaining
+        }));
+      }, 1000);
+    };
+  
+    startCountdownTimer();
+  
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [gameState.nextUpdateTime]); // Correct dependency
+  
 
   // Handle hex cell clicks
   const handleHexClick: ClickHandler = async (index, button) => {
