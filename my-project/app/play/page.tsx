@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import styles from "../page.module.css";
 import { useRouter, useSearchParams } from "next/navigation";
-import HexGrid from "../hexgrid"; // Assuming HexGrid is in components folder
+import HexGrid from "../hexgrid"; // Assuming HexGrid is in the components folder
 
-export default function PlayPage() {
+function PlayPageContent() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -69,5 +69,13 @@ export default function PlayPage() {
         )}
       </main>
     </div>
+  );
+}
+
+export default function PlayPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PlayPageContent />
+    </Suspense>
   );
 }
