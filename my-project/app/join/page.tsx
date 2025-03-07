@@ -58,7 +58,6 @@ export default function Home() {
           <div className={styles.errorMessage}>{errorMessage}</div>
         )}
       </main>
-      <footer className={styles.footer}>Visit the source code on GitHub</footer>
     </div>
   );
 }
