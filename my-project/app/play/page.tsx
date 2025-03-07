@@ -12,8 +12,8 @@ export default function PlayPage() {
   const searchParams = useSearchParams();
   
   // Get gameCode and playerId from URL parameters
-  const gameCode = searchParams?.get('gameCode');
-  const playerId = searchParams?.get('playerId');
+  const gameCode = searchParams?.get("gameCode");
+  const playerId = searchParams?.get("playerId");
 
   useEffect(() => {
     // Validate that we have required parameters
@@ -68,7 +68,6 @@ export default function PlayPage() {
           </div>
         )}
       </main>
-      <footer className={styles.footer}>Visit the source code on GitHub</footer>
     </div>
   );
 }
