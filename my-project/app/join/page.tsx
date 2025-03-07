@@ -26,7 +26,7 @@ export default function Home() {
       } else {
         setErrorMessage("Failed to join the game. Please check the code.");
       }
-    } catch (error) {
+    } catch {
       setErrorMessage(
         "An error occurred while joining the game. Please try again."
       );

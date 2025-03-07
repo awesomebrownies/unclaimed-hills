@@ -54,7 +54,7 @@ export default function PlayPage() {
     <div className={styles.page}>
       <main className={styles.main}>
         <div className={styles.gameInfo}>
-          <h1>You've joined a game</h1>
+          <h1>You have joined a game</h1>
           <h2>Game Code: <span className={styles.gameCode}>{gameCode}</span></h2>
         </div>
 

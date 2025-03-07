@@ -29,7 +29,7 @@ export default function HostPage() {
           setError("Failed to create game. Please try again.");
           setIsLoading(false);
         }
-      } catch (error) {
+      } catch {
         setError("An error occurred while creating the game. Please try again.");
         setIsLoading(false);
       }
